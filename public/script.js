@@ -2,9 +2,11 @@ let readyStatus = document.querySelector('#readyStatus')
 let notReadyStatus = document.querySelector('#notReadyStatus')
 let myForm = document.querySelector('#myForm')
 let contentArea = document.querySelector('#contentArea')
-let formPopover = document.querySelector('#formPopover')
+let formDialog = document.querySelector('#formDialog')
 let createButton = document.querySelector('#createButton')
-let formHeading = document.querySelector('#formPopover h2')
+let saveButton = document.querySelector('#saveButton')
+let cancelButton = document.querySelector('#cancelButton')
+let formHeading = document.querySelector('.modal-header h2')
 
 // Get form data and process each type of input
 // Prepare the data as JSON with a proper set of types
@@ -44,7 +46,23 @@ myForm.addEventListener('submit', async event => {
     const data = getFormData()
     await saveItem(data)
     myForm.reset()
-    formPopover.hidePopover()
+    formDialog.close()
+})
+
+// Open dialog when create button clicked
+createButton.addEventListener('click', () => {
+    myForm.reset()
+    formDialog.showModal()
+})
+
+// Close dialog when cancel button clicked
+cancelButton.addEventListener('click', () => {
+    formDialog.close()
+})
+
+// Save button submits the form
+saveButton.addEventListener('click', () => {
+    myForm.requestSubmit()
 })
 
 
@@ -115,15 +133,15 @@ const editItem = (data) => {
     })
 
     // Update the heading to indicate edit mode
-    formHeading.textContent = '🐈 Edit Cat'
+    formHeading.textContent = '🎮 Edit Game'
 
-    // Show the popover
-    formPopover.showPopover()
+    // Show the dialog
+    formDialog.showModal()
 }
 
 // Delete item
 const deleteItem = async (id) => {
-    if (!confirm('Are you sure you want to delete this cat?')) {
+    if (!confirm('Are you sure you want to delete this game?')) {
         return
     }
 
@@ -156,7 +174,7 @@ const calendarWidget = (date) => {
     const day = new Date(date).toLocaleString("en-CA", { day: '2-digit', timeZone: "UTC" })
     const year = new Date(date).toLocaleString("en-CA", { year: 'numeric', timeZone: "UTC" })
     return ` <div class="calendar">
-                <div class="born"><img src="./assets/birthday.svg" /></div>
+                <div class="born"><img src="./assets/ribbon.svg" /></div>
                 <div class="month">${month}</div>
                 <div class="day">${day}</div> 
                 <div class="year">${year}</div>
@@ -172,45 +190,53 @@ const renderItem = (item) => {
 
     const template = /*html*/`  
     <div class="item-heading">
-        <h3> ${item.name} </h3>
+        <h3> ${item.title} </h3>
         <div class="microchip-info">
-            <img src="./assets/chip.svg" /> ${item.microchip || '<i>???</i>'} 
+            ${item.rating ? `⭐ ${item.rating}/10` : '<i>Not rated</i>'} 
         </div>  
     </div>
     <div class="item-info"> 
         <div class="item-icon" style="
             background: linear-gradient(135deg, 
-            ${item.primaryColor} 0%, 
-            ${item.primaryColor} 40%, 
-            ${item.secondaryColor} 60%, 
-            ${item.secondaryColor} 100%); 
+            ${item.primaryColor || '#5f5854'} 0%, 
+            ${item.primaryColor || '#5f5854'} 40%, 
+            ${item.secondaryColor || '#c4c8cf'} 60%, 
+            ${item.secondaryColor || '#c4c8cf'} 100%); 
         ">
         </div> 
         <div class="stats">
             <div class="stat">
-                <span>Playfulness</span>
-                <meter max="10" min="0" value="${item.playfulness || 0}"></meter> 
+                <span>Difficulty</span>
+                <meter max="10" min="0" value="${item.difficulty || 0}"></meter> 
             </div>
             <div class="stat">
-                <span>Appetite</span>
-                <meter max="10" min="0" value="${item.appetite || 0}"></meter> 
+                <span>Replay Value</span>
+                <meter max="10" min="0" value="${item.replayValue || 0}"></meter> 
             </div>
         </div> 
             
-         ${calendarWidget(item.birthDate)}
+         ${calendarWidget(item.releaseDate)}
     </div>
         
     <div class="item-info">  
-        <section class="breed" style="${item.breed ? '' : 'display:none;'}">  
-            <img src="./assets/ribbon.svg" />  ${item.breed}
+        <section class="breed" style="${item.genre ? '' : 'display:none;'}">  
+            <img src="./assets/ribbon.svg" />  ${item.genre}
         </section>
-        <section class="food" style="${item.food ? '' : 'display:none;'}">
-             <img src="./assets/${item.food}.svg" /> <span>${item.food} food</span>
+        <section class="food" style="${item.platform ? '' : 'display:none;'}">
+             <img src="./assets/chip.svg" /> <span>${item.platform}</span>
         </section> 
         <section class="adoption">
-            <img src="./assets/${item.isAdopted ? 'adopted' : 'paw'}.svg" />
-            ${item.isAdopted ? 'Adopted' : 'Available'}
+            <img src="./assets/${item.completed ? 'adopted' : 'paw'}.svg" />
+            ${item.completed ? 'Completed' : 'In Progress'}
         </section> 
+    </div>
+
+    <div class="item-info" style="${item.publisher || item.developer || item.price || item.hoursPlayed ? '' : 'display:none;'}">
+        ${item.publisher ? `<section class="breed"><strong>Publisher:</strong> ${item.publisher}</section>` : ''}
+        ${item.developer ? `<section class="breed"><strong>Developer:</strong> ${item.developer}</section>` : ''}
+        ${item.price ? `<section class="breed"><strong>Price:</strong> $${item.price}</section>` : ''}
+        ${item.hoursPlayed ? `<section class="breed"><strong>Hours Played:</strong> ${item.hoursPlayed}</section>` : ''}
+        ${item.multiplayer ? `<section class="adoption"><img src="./assets/paw.svg" />Multiplayer</section>` : ''}
     </div>
 
     <section class="description" style="${item.description ? '' : 'display:none;'}">  
@@ -272,10 +298,9 @@ const getData = async () => {
 }
 
 // Revert to the default form title on reset
-myForm.addEventListener('reset', () => formHeading.textContent = '🐈 Share a Cat')
-
-// Reset the form when the create button is clicked. 
-createButton.addEventListener('click', myForm.reset())
+myForm.addEventListener('reset', () => {
+    formHeading.textContent = '🎮 Add a Video Game'
+})
 
 // Load initial data
 getData()

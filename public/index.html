@@ -8,7 +8,7 @@
     content="width=device-width initial-scale=1"
   />
 
-  <title>Managing Data</title>
+  <title>Video Game Collection Manager</title>
 
   <link
     rel="preconnect"
@@ -36,7 +36,7 @@
 
 <body>
   <header>
-    <h1>Managing Data</h1>
+    <h1>Video Game Collection Manager</h1>
     <h4>CRUD: a full data lifecycle</h4>
   </header>
   <section id="status">
@@ -44,18 +44,20 @@
     <p id="notReadyStatus">❌ MongoDB is not connected. Please check your connection string in <code>.env</code> file.
     </p>
   </section>
-  <button
-    id="createButton"
-    popovertarget="formPopover"
-  >Create New Cat</button>
+  <button id="createButton">Add New Game</button>
 
-  <div
-    id="formPopover"
-    popover
-  >
-    <h2>🐈 Share a Cat</h2>
-    <p>Share your kitty with the community</p>
-    <form id="myForm">
+  <dialog id="formDialog">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>🎮 Add a Video Game</h2>
+        <p>Add a game to your collection</p>
+      </div>
+
+      <div class="modal-body">
+        <form
+          id="myForm"
+          method="dialog"
+        >
       <!-- Hidden field to store ID for updates -->
       <input
         type="hidden"
@@ -63,25 +65,28 @@
         id="id"
       />
 
+      
+
+
       <fieldset>
-        <label for="name">Cat Name</label>
+        <label for="title">Game Title</label>
         <input
           required
           type="text"
-          name="name"
-          id="name"
-          placeholder="e.g. Sofia"
+          name="title"
+          id="title"
+          placeholder="e.g. The Legend of Zelda"
           autocomplete="off"
         />
-        <small class="validation">Name is required</small>
+        <small class="validation">Title is required</small>
       </fieldset>
 
       <fieldset>
-        <label for="birthDate">Birth Date</label>
+        <label for="releaseDate">Release Date</label>
         <input
           type="date"
-          name="birthDate"
-          id="birthDate"
+          name="releaseDate"
+          id="releaseDate"
         />
       </fieldset>
 
@@ -106,48 +111,122 @@
       </fieldset>
 
       <fieldset>
-        <label for="breed">Breed</label>
+        <label for="genre">Genre</label>
         <select
-          name="breed"
-          id="breed"
+          name="genre"
+          id="genre"
         >
           <option
             value=""
             disabled
             selected
-          >Select a Breed</option>
-          <optgroup label="Domestic">
-            <option value="Abyssinian">Abyssinian</option>
-            <option value="Bengal">Bengal</option>
-            <option value="Burmese">Burmese</option>
-            <option value="Chartreux">Chartreux</option>
-            <option value="Maine Coon">Maine Coon</option>
-            <option value="Persian">Persian</option>
-            <option value="Ragdoll">Ragdoll</option>
-            <option value="Shorthair">Shorthair</option>
-            <option value="Siamese">Siamese</option>
-            <option value="Sphynx">Sphynx</option>
-            <option value="Ragamuffin">Ragamuffin</option>
-          </optgroup>
-          <optgroup label="Exotic">
-            <option value="Tiger">Tiger</option>
-            <option value="Lion">Lion</option>
-            <option value="Panther">Panther</option>
-            <option value="Jaguar">Jaguar</option>
-            <option value="Lynx">Lynx</option>
-          </optgroup>
-          <optgroup label="Other">
-            <option value="Other">Other</option>
-            <option value="Unknown">Unknown</option>
-          </optgroup>
+          >Select a Genre</option>
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <option value="RPG">RPG</option>
+          <option value="Strategy">Strategy</option>
+          <option value="Simulation">Simulation</option>
+          <option value="Sports">Sports</option>
+          <option value="Racing">Racing</option>
+          <option value="Fighting">Fighting</option>
+          <option value="Platformer">Platformer</option>
+          <option value="Puzzle">Puzzle</option>
+          <option value="Shooter">Shooter</option>
+          <option value="Horror">Horror</option>
+          <option value="Survival">Survival</option>
+          <option value="MMORPG">MMORPG</option>
+          <option value="Other">Other</option>
         </select>
       </fieldset>
 
       <fieldset>
+        <label for="platform">Platform</label>
+        <select
+          name="platform"
+          id="platform"
+        >
+          <option
+            value=""
+            disabled
+            selected
+          >Select a Platform</option>
+          <option value="PC">PC</option>
+          <option value="PlayStation 5">PlayStation 5</option>
+          <option value="PlayStation 4">PlayStation 4</option>
+          <option value="Xbox Series X/S">Xbox Series X/S</option>
+          <option value="Xbox One">Xbox One</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+          <option value="Mobile">Mobile</option>
+          <option value="Multi-Platform">Multi-Platform</option>
+          <option value="Other">Other</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <label for="publisher">Publisher</label>
+        <input
+          type="text"
+          name="publisher"
+          id="publisher"
+          placeholder="e.g. Nintendo"
+          autocomplete="off"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="developer">Developer</label>
+        <input
+          type="text"
+          name="developer"
+          id="developer"
+          placeholder="e.g. Nintendo EPD"
+          autocomplete="off"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="rating">Rating</label>
+        <small>Rate this game out of 10</small>
+        <input
+          type="number"
+          min="0"
+          max="10"
+          step="0.1"
+          name="rating"
+          id="rating"
+          placeholder="e.g. 8.5"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="price">Price (USD)</label>
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          name="price"
+          id="price"
+          placeholder="e.g. 59.99"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="hoursPlayed">Hours Played</label>
+        <input
+          type="number"
+          min="0"
+          step="1"
+          name="hoursPlayed"
+          id="hoursPlayed"
+          placeholder="e.g. 45"
+        />
+      </fieldset>
+
+      <fieldset>
         <label for="description">Description</label>
-        <small>Provide a brief biography.</small>
+        <small>Provide a brief summary of the game.</small>
         <textarea
-          placeholder="Biography"
+          placeholder="Game description..."
           required
           minlength="20"
           name="description"
@@ -155,105 +234,72 @@
           rows="6"
           cols="30"
         ></textarea>
-        <small class="validation">Bio must be at least 20 characters.</small>
+        <small class="validation">Description must be at least 20 characters.</small>
       </fieldset>
 
       <fieldset>
-        <label for="playfulness">Playfulness</label>
-        <small>Chill or chaotic?</small>
+        <label for="difficulty">Difficulty</label>
+        <small>How challenging is this game?</small>
         <input
           type="range"
           min="0"
           max="10"
-          name="playfulness"
-          id="playfulness"
+          name="difficulty"
+          id="difficulty"
         />
       </fieldset>
 
       <fieldset>
-        <label for="appetite">Appetite</label>
-        <small>Is this a hungry Cat?</small>
+        <label for="replayValue">Replay Value</label>
+        <small>How replayable is this game?</small>
         <input
           type="range"
           min="0"
           max="10"
-          name="appetite"
-          id="appetite"
+          name="replayValue"
+          id="replayValue"
         />
       </fieldset>
 
       <fieldset>
-        <legend>Food</legend>
-        <small>Any Preferences?</small>
-        <label for="wet">
-          <input
-            type="radio"
-            id="wet"
-            name="food"
-            value="wet"
-          />
-          <span>Wet</span>
-        </label>
-        <label for="dry">
-          <input
-            type="radio"
-            id="dry"
-            name="food"
-            value="dry"
-          />
-          <span>Dry</span>
-        </label>
-        <label for="mixed">
-          <input
-            type="radio"
-            id="mixed"
-            name="food"
-            value="mixed"
-          />
-          <span>Mixed</span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Rescue Status</legend>
-        <label for="isAdopted">
+        <legend>Game Features</legend>
+        <label for="multiplayer">
           <input
             type="checkbox"
-            name="isAdopted"
-            id="isAdopted"
+            name="multiplayer"
+            id="multiplayer"
           />
-          <span>Adopted</span>
+          <span>Multiplayer</span>
+        </label>
+        <label for="completed">
+          <input
+            type="checkbox"
+            name="completed"
+            id="completed"
+          />
+          <span>Completed</span>
         </label>
       </fieldset>
+        </form>
+      </div>
 
-      <fieldset>
-        <label for="microchip">Microchip Number</label>
-        <small>It's usually nine digits</small>
-        <input
-          required
-          type="number"
-          name="microchip"
-          step="1"
-          max="999999999"
-          id="microchip"
-          placeholder="e.g. 123456789"
-        />
-      </fieldset>
-
-      <fieldset>
-        <button class="save">Save</button>
+      <div class="modal-footer">
         <button
-          class="cancel"
           type="button"
-          popovertarget="formPopover"
-          popovertargetaction="hide"
+          class="save"
+          id="saveButton"
+        >Save</button>
+        <button
+          type="button"
+          class="cancel"
+          id="cancelButton"
         >Cancel</button>
-      </fieldset>
-    </form>
-  </div>
+      </div>
+    </div>
+  </dialog>
 
   <main>
-    <h2>🐈 Noteworthy Cats</h2>
+    <h2>🎮 Video Game Collection</h2>
     <section id="contentArea"></section>
   </main>
 
@@ -291,10 +337,10 @@
     <p>Can you add a connection string to the NodeJS environment (e.g. .env file) for your own MongoDB Atlas Cluster?
     </p>
     <p>Use MongoDB Compass to verify that your data collection form is working. </p>
-    <p>Try out all CRUD operations: Create a new cat, Edit an existing cat by clicking the Edit button, and Delete a cat
+    <p>Try out all CRUD operations: Create a new game, Edit an existing game by clicking the Edit button, and Delete a game
       you no longer need.</p>
-    <p>Explore the API endpoints in your browser: visit /data to see all cats in JSON format, or try /search?terms=Sofia
-      to search for specific cats.</p>
+    <p>Explore the API endpoints in your browser: visit /data to see all games in JSON format, or try /search?terms=Zelda
+      to search for specific games.</p>
   </section>
 
   <footer>

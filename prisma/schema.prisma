@@ -7,24 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model cats {
+model videogames {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  adoptionDate   DateTime? @db.Date
-  birthDate      DateTime? @db.Date
-  breed          String?
-  declawed       Boolean?
+  title          String?
+  releaseDate    DateTime? @db.Date
+  genre          String?
+  platform       String?
+  publisher      String?
+  developer      String?
+  rating         Float?
+  price          Float?
   description    String?
-  fosterDate     DateTime? @db.Date
-  fosterDuration Int?
-  location       String?
-  name           String?
-  neutered       Boolean?
-  sex            String?
+  multiplayer    Boolean?
+  completed      Boolean?
+  hoursPlayed    Int?
+  difficulty     Int?
+  replayValue    Int?
   primaryColor   String?
   secondaryColor String?
-  playfulness    Int?
-  appetite       Int?
-  microchip      Int?
-  isAdopted      Boolean?
-  food           String?
 }
