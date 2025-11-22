@@ -14,7 +14,9 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^6.18.0",
-    "express": "^5.1.0"
+    "dotenv": "^16.0.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.0.0"
   },
   "devDependencies": {
     "prisma": "^6.18.0"

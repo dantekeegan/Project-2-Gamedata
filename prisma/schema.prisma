@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,21 +11,22 @@ datasource db {
 }
 
 model videogames {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  title          String?
-  releaseDate    DateTime? @db.Date
-  genre          String?
-  platform       String?
-  publisher      String?
-  developer      String?
-  rating         Float?
-  price          Float?
-  description    String?
-  multiplayer    Boolean?
-  completed      Boolean?
-  hoursPlayed    Int?
-  difficulty     Int?
-  replayValue    Int?
-  primaryColor   String?
-  secondaryColor String?
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  title           String?
+  releaseDate     DateTime? @db.Date
+  image           String?   // Base64 or URL
+  genre           String?
+  platform        String?
+  publisher       String?
+  developer       String?
+  rating          Float?
+  price           Float?
+  description     String?
+  multiplayer     Boolean?
+  completed       Boolean?
+  hoursPlayed     Int?
+  difficulty      Int?
+  replayValue     Int?
+  primaryColor    String?
+  secondaryColor  String?
 }

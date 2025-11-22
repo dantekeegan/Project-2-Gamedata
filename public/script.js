@@ -1,12 +1,31 @@
-let readyStatus = document.querySelector('#readyStatus')
-let notReadyStatus = document.querySelector('#notReadyStatus')
-let myForm = document.querySelector('#myForm')
-let contentArea = document.querySelector('#contentArea')
-let formDialog = document.querySelector('#formDialog')
-let createButton = document.querySelector('#createButton')
-let saveButton = document.querySelector('#saveButton')
-let cancelButton = document.querySelector('#cancelButton')
-let formHeading = document.querySelector('.modal-header h2')
+// Frontend logic for Video Game Collection Manager
+const createButton = document.getElementById('createButton')
+const formDialog = document.getElementById('formDialog')
+const saveButton = document.getElementById('saveButton')
+const cancelButton = document.getElementById('cancelButton')
+const contentArea = document.getElementById('contentArea')
+const form = document.getElementById('myForm')
+const imageInput = document.getElementById('image')
+const imagePreview = document.getElementById('imagePreview')
+const readyStatus = document.getElementById('readyStatus')
+const notReadyStatus = document.getElementById('notReadyStatus')
+
+// Dynamic API base: if opened via file:// fallback to localhost:3003
+const API_BASE = (location.protocol === 'file:' ? 'http://localhost:3003' : '')
+
+function apiUrl(path) { return `${API_BASE}${path}` }
+
+// Simple toast utility
+function showToast(msg, type = 'info') {
+  let toast = document.createElement('div')
+  toast.className = `toast toast-${type}`
+  toast.textContent = msg
+  Object.assign(toast.style, {
+    position: 'fixed', bottom: '1rem', right: '1rem', background: type==='error' ? '#b30000' : '#333', color: '#fff', padding: '0.6rem 0.9rem', borderRadius: '4px', zIndex: 9999, fontSize: '0.85rem', boxShadow:'0 2px 6px rgba(0,0,0,0.3)'
+  })
+  document.body.appendChild(toast)
+  setTimeout(() => toast.remove(), 3500)
+}
 
 // Get form data and process each type of input
 // Prepare the data as JSON with a proper set of types
@@ -39,19 +58,13 @@ const getFormData = () => {
 }
 
 
-// listen for form submissions  
-myForm.addEventListener('submit', async event => {
-    // prevent the page from reloading when the form is submitted.
-    event.preventDefault()
-    const data = getFormData()
-    await saveItem(data)
-    myForm.reset()
-    formDialog.close()
-})
+// Form submission handled by saveButton listener below
 
 // Open dialog when create button clicked
 createButton.addEventListener('click', () => {
     myForm.reset()
+    document.getElementById('id').value = ''
+    imagePreview.style.display = 'none'
     formDialog.showModal()
 })
 
@@ -59,12 +72,6 @@ createButton.addEventListener('click', () => {
 cancelButton.addEventListener('click', () => {
     formDialog.close()
 })
-
-// Save button submits the form
-saveButton.addEventListener('click', () => {
-    myForm.requestSubmit()
-})
-
 
 // Save item (Create or Update)
 const saveItem = async (data) => {
@@ -132,41 +139,9 @@ const editItem = (data) => {
         }
     })
 
-    // Update the heading to indicate edit mode
-    formHeading.textContent = '🎮 Edit Game'
-
     // Show the dialog
     formDialog.showModal()
 }
-
-// Delete item
-const deleteItem = async (id) => {
-    if (!confirm('Are you sure you want to delete this game?')) {
-        return
-    }
-
-    const endpoint = `/data/${id}`
-    const options = { method: "DELETE" }
-
-    try {
-        const response = await fetch(endpoint, options)
-
-        if (response.ok) {
-            const result = await response.json()
-            console.log('Deleted:', result)
-            // Refresh the data list
-            getData()
-        }
-        else {
-            const errorData = await response.json()
-            alert(errorData.error || 'Failed to delete item')
-        }
-    } catch (error) {
-        console.error('Delete error:', error)
-        alert('An error occurred while deleting')
-    }
-}
-
 
 const calendarWidget = (date) => {
     if (!date) return ''
@@ -189,13 +164,13 @@ const renderItem = (item) => {
     div.setAttribute('data-id', item.id)
 
     const template = /*html*/`  
-    <div class="item-heading">
+    <div class="item-heading>
         <h3> ${item.title} </h3>
-        <div class="microchip-info">
+        <div class="microchip-info>
             ${item.rating ? `⭐ ${item.rating}/10` : '<i>Not rated</i>'} 
         </div>  
     </div>
-    <div class="item-info"> 
+    <div class="item-info> 
         <div class="item-icon" style="
             background: linear-gradient(135deg, 
             ${item.primaryColor || '#5f5854'} 0%, 
@@ -204,12 +179,12 @@ const renderItem = (item) => {
             ${item.secondaryColor || '#c4c8cf'} 100%); 
         ">
         </div> 
-        <div class="stats">
-            <div class="stat">
+        <div class="stats>
+            <div class="stat>
                 <span>Difficulty</span>
                 <meter max="10" min="0" value="${item.difficulty || 0}"></meter> 
             </div>
-            <div class="stat">
+            <div class="stat>
                 <span>Replay Value</span>
                 <meter max="10" min="0" value="${item.replayValue || 0}"></meter> 
             </div>
@@ -218,7 +193,7 @@ const renderItem = (item) => {
          ${calendarWidget(item.releaseDate)}
     </div>
         
-    <div class="item-info">  
+    <div class="item-info>  
         <section class="breed" style="${item.genre ? '' : 'display:none;'}">  
             <img src="./assets/ribbon.svg" />  ${item.genre}
         </section>
@@ -245,7 +220,7 @@ const renderItem = (item) => {
 
         
            
-        <div class="item-actions">
+        <div class="item-actions>
             <button class="edit-btn">Edit</button>
             <button class="delete-btn">Delete</button>
         </div>
@@ -297,10 +272,248 @@ const getData = async () => {
     }
 }
 
-// Revert to the default form title on reset
-myForm.addEventListener('reset', () => {
-    formHeading.textContent = '🎮 Add a Video Game'
+// Form reset handled
+
+// Image preview for file input
+imageInput?.addEventListener('change', () => {
+    const file = imageInput.files?.[0]
+    if (!file) {
+        imagePreview.style.display = 'none'
+        imagePreview.src = ''
+        return
+    }
+    const url = URL.createObjectURL(file)
+    imagePreview.src = url
+    imagePreview.style.display = 'block'
 })
 
-// Load initial data
-getData()
+// Validate helpers
+function validateForm() {
+    if (!myForm.reportValidity()) return false
+    if (myForm.description.value.trim().length < 20) {
+        alert('Description must be at least 20 characters.')
+        return false
+    }
+    return true
+}
+
+// Build data object from form inputs
+function buildData(imageData) {
+  return {
+    title: form.title.value.trim(),
+    releaseDate: form.releaseDate.value ? new Date(form.releaseDate.value).toISOString() : null,
+    image: imageData || null,
+    genre: form.genre.value || null,
+    platform: form.platform.value || null,
+    publisher: form.publisher.value.trim() || null,
+    developer: form.developer.value.trim() || null,
+    rating: form.rating.value ? Number(form.rating.value) : null,
+    price: form.price.value ? Number(form.price.value) : null,
+    hoursPlayed: form.hoursPlayed.value ? Number(form.hoursPlayed.value) : null,
+    description: form.description.value.trim(),
+    difficulty: form.difficulty.value ? Number(form.difficulty.value) : null,
+    replayValue: form.replayValue.value ? Number(form.replayValue.value) : null,
+    multiplayer: form.multiplayer.checked,
+    completed: form.completed.checked
+  }
+}
+
+// Replace previous postOrPut with enhanced logging
+async function postOrPut(data, id) {
+  const method = id ? 'PUT' : 'POST'
+  const url = id ? apiUrl(`/data/${id}`) : apiUrl('/data')
+  console.log('[SAVE] method:', method, 'url:', url, 'payload:', data)
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).catch(err => { throw new Error('Network error: ' + err.message) })
+  console.log('[SAVE] response status:', res.status)
+  if (!res.ok) {
+    const txt = await res.text()
+    console.error('[SAVE] error body:', txt)
+    throw new Error(`Server ${res.status}: ${txt}`)
+  }
+  return res.json()
+}
+
+// Adjust loadGames to use apiUrl
+async function loadGames() {
+  try {
+    const res = await fetch(apiUrl('/data'))
+    console.log('[LOAD] /data status:', res.status)
+    if (!res.ok) throw new Error('Failed to fetch list')
+    const items = await res.json()
+    console.log('[LOAD] items count:', items.length)
+    renderGames(items)
+  } catch (e) {
+    console.error(e)
+    contentArea.innerHTML = '<p class="error">Failed to load games.</p>'
+    showToast('Failed to load games', 'error')
+  }
+}
+
+// Enhance save handler with user feedback
+saveButton.addEventListener('click', async () => {
+  try {
+    if (!validateForm()) return
+    saveButton.disabled = true
+    showToast('Saving...', 'info')
+    const id = document.getElementById('id').value
+    const file = imageInput.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = async () => {
+        try {
+          const data = buildData(reader.result)
+          await postOrPut(data, id)
+          formDialog.close()
+          await loadGames()
+          showToast(id ? 'Game updated' : 'Game created', 'info')
+        } catch (err) {
+          console.error(err)
+          alert(err.message)
+          showToast('Save failed', 'error')
+        } finally {
+          saveButton.disabled = false
+        }
+      }
+      reader.readAsDataURL(file)
+    } else {
+      const data = buildData(null)
+      await postOrPut(data, id)
+      formDialog.close()
+      await loadGames()
+      showToast(id ? 'Game updated' : 'Game created', 'info')
+      saveButton.disabled = false
+    }
+  } catch (e) {
+    console.error(e)
+    alert('Could not save: ' + e.message)
+    showToast('Save failed', 'error')
+    saveButton.disabled = false
+  }
+})
+
+// Update status endpoint call
+async function updateStatus() {
+  try {
+    const res = await fetch(apiUrl('/status'))
+    console.log('[STATUS] status code:', res.status)
+    if (!res.ok) throw new Error('Status fetch failed')
+    const json = await res.json()
+    const ok = json.mongo === true || json.ok === true || json.ready === true
+    readyStatus.style.display = ok ? 'block' : 'none'
+    notReadyStatus.style.display = ok ? 'none' : 'block'
+  } catch (e) {
+    console.error('[STATUS] error:', e.message)
+    readyStatus.style.display = 'none'
+    notReadyStatus.style.display = 'block'
+  }
+}
+
+// Initial kick
+updateStatus()
+loadGames()
+
+// Periodically refresh status & list (optional)
+setInterval(updateStatus, 15000)
+
+// ...existing code...
+
+function sanitize(html) {
+  return DOMPurify.sanitize(html)
+}
+
+function renderGames(items) {
+  if (!Array.isArray(items) || items.length === 0) {
+    contentArea.innerHTML = '<p>No games yet.</p>'
+    return
+  }
+  contentArea.innerHTML = items.map(item => {
+    const imgTag = item.image ? `<img class="game-cover" src="${sanitize(item.image)}" alt="${sanitize(item.title)}" />` : ''
+    return `
+      <article class="game-card" data-id="${sanitize(item.id || item._id)}">
+        <header>
+          ${imgTag}
+          <div>
+            <h3>${sanitize(item.title)}</h3>
+            ${item.publisher ? `<small>Publisher: ${sanitize(item.publisher)}</small>` : ''}
+          </div>
+        </header>
+        <p>${sanitize(item.description || '')}</p>
+        <div class="game-meta">
+          ${item.platform ? `<span>📱 ${sanitize(item.platform)}</span>` : ''}
+          ${item.genre ? `<span>🎮 ${sanitize(item.genre)}</span>` : ''}
+          ${item.rating ? `<span>⭐ ${item.rating}/10</span>` : ''}
+          ${item.price ? `<span>💰 $${item.price}</span>` : ''}
+          ${item.hoursPlayed ? `<span>⏱️ ${item.hoursPlayed}h</span>` : ''}
+          ${item.completed ? `<span>✅ Completed</span>` : `<span>🎯 In Progress</span>`}
+          ${item.multiplayer ? `<span>👥 Multiplayer</span>` : ''}
+        </div>
+        ${item.developer ? `<p style="font-size:0.8rem;color:#888;margin-top:0.5rem;">Developer: ${sanitize(item.developer)}</p>` : ''}
+        <div class="actions">
+          <button class="edit" data-id="${sanitize(item.id || item._id)}">Edit</button>
+          <button class="delete" data-id="${sanitize(item.id || item._id)}">Delete</button>
+        </div>
+      </article>
+    `
+  }).join('')
+  attachRowListeners()
+}
+
+function attachRowListeners() {
+  contentArea.querySelectorAll('button.edit').forEach(btn => {
+    btn.addEventListener('click', () => startEdit(btn.dataset.id))
+  })
+  contentArea.querySelectorAll('button.delete').forEach(btn => {
+    btn.addEventListener('click', () => deleteItem(btn.dataset.id))
+  })
+}
+
+async function startEdit(id) {
+  try {
+    const res = await fetch(apiUrl(`/data/${id}`))
+    if (!res.ok) throw new Error('Fetch item failed')
+    const item = await res.json()
+    document.getElementById('id').value = item.id || item._id
+    form.title.value = item.title || ''
+    form.releaseDate.value = item.releaseDate ? item.releaseDate.substring(0,10) : ''
+    form.genre.value = item.genre || ''
+    form.platform.value = item.platform || ''
+    form.publisher.value = item.publisher || ''
+    form.developer.value = item.developer || ''
+    form.rating.value = item.rating ?? ''
+    form.price.value = item.price ?? ''
+    form.hoursPlayed.value = item.hoursPlayed ?? ''
+    form.description.value = item.description || ''
+    form.difficulty.value = item.difficulty ?? 0
+    form.replayValue.value = item.replayValue ?? 0
+    form.multiplayer.checked = !!item.multiplayer
+    form.completed.checked = !!item.completed
+    if (item.image) {
+      imagePreview.src = item.image
+      imagePreview.style.display = 'block'
+    } else {
+      imagePreview.style.display = 'none'
+    }
+    formDialog.showModal()
+  } catch (e) {
+    console.error(e)
+    alert('Could not load item for edit.')
+  }
+}
+
+async function deleteItem(id) {
+  if (!confirm('Delete this game?')) return
+  try {
+    const res = await fetch(apiUrl(`/data/${id}`), { method: 'DELETE' })
+    if (!res.ok) throw new Error('Delete failed')
+    await loadGames()
+    showToast('Game deleted', 'info')
+  } catch (e) {
+    console.error(e)
+    alert('Could not delete.')
+    showToast('Delete failed', 'error')
+  }
+}

@@ -91,23 +91,17 @@
       </fieldset>
 
       <fieldset>
-        <label for="primaryColor">Primary Color</label>
+        <label for="image">Cover Image</label>
         <input
-          type="color"
-          name="primaryColor"
-          id="primaryColor"
-          value="#5f5854"
+          type="file"
+          name="image"
+          id="image"
+          accept="image/*"
         />
-      </fieldset>
-
-      <fieldset>
-        <label for="secondaryColor">Secondary Color</label>
-        <input
-          type="color"
-          name="secondaryColor"
-          id="secondaryColor"
-          value="#c4c8cf"
-        />
+        <small>Upload an image to use as the game icon.</small>
+        <div class="image-preview">
+          <img id="imagePreview" alt="Preview" style="display:none; max-width:120px; height:auto;" />
+        </div>
       </fieldset>
 
       <fieldset>

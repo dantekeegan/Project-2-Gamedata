@@ -84,12 +84,12 @@ model videogames {
 ## Implementation Order
 
 1. ✅ Update plan.md with detailed strategy (this file)
-2. Update Prisma schema.prisma
-3. Update routes/api.js model name
-4. Update public/index.html form fields
-5. Update public/script.js rendering template
-6. Update page titles and headings
-7. Test all CRUD operations
+2. ✅ Update Prisma schema.prisma (added `image` field, removed `primaryColor`/`secondaryColor` from plan but kept in schema)
+3. ✅ Update routes/api.js model name (changed to 'videogames')
+4. ✅ Update public/index.html form fields (all video game fields added)
+5. ✅ Update public/script.js rendering template (dual rendering: old renderItem + new renderGames)
+6. ✅ Update page titles and headings (changed to Video Game Collection Manager)
+7. ✅ Test all CRUD operations (working)
 
 ## Notes
 - Maintain the existing card-based layout
@@ -97,3 +97,77 @@ model videogames {
 - Ensure form validation works with new fields
 - Test date handling for release dates
 - Verify number inputs accept appropriate ranges
+
+## Current State (Checkpoint - Jan 2025)
+
+### Completed Changes
+- ✅ Prisma schema updated with videogames model including `image` field
+- ✅ MongoDB connection via mongoose in server.js with fallback to DATABASE_URL
+- ✅ Express body limit increased to 10mb for Base64 images
+- ✅ Form fields updated: image upload, all game attributes (genre, platform, publisher, developer, rating, price, hoursPlayed, difficulty, replayValue, multiplayer, completed)
+- ✅ Image upload with Base64 encoding and preview
+- ✅ Date handling fixed: converts to ISO-8601 DateTime for Prisma
+- ✅ Dual rendering system: renderItem (old detailed cards) + renderGames (new simplified cards)
+- ✅ CRUD operations working: Create, Read, Update, Delete
+- ✅ Toast notifications for user feedback
+- ✅ Status endpoint for MongoDB connection check
+- ✅ Remove duplicate functions (deleteItem, saveButton listener)
+
+### File Structure
+```
+Project-2-Gamedata/
+├── .env (DATABASE_URL for MongoDB Atlas)
+├── package.json (express, mongoose, dotenv, @prisma/client, prisma)
+├── server.js (Express + Mongoose + /status endpoint)
+├── prisma/
+│   └── schema.prisma (videogames model with image field)
+├── routes/
+│   └── api.js (CRUD endpoints for videogames)
+└── public/
+    ├── index.html (form with image upload)
+    ├── script.js (dual rendering, image handling)
+    ├── style.css
+    └── assets/ (SVG icons - cat-themed, can be renamed later)
+```
+
+### Known Issues / Tech Debt
+- Two rendering functions coexist: `renderItem()` (detailed) and `renderGames()` (simple cards)
+- Currently using `renderGames()` for display, `renderItem()` unused but kept
+- Image stored as Base64 (can be large, consider external storage like Cloudinary/S3)
+- `primaryColor`/`secondaryColor` still in schema but not used in new form
+- Asset SVGs still cat-themed (can rename: cat→game, adopted→completed, etc.)
+
+### How to Run
+```bash
+cd "/Users/keeganhonore/Project 2 Gamedata/Project-2-Gamedata"
+npm install
+npx prisma generate
+npm run start
+```
+Visit: http://localhost:3003
+
+### Dependencies
+```json
+{
+  "express": "^5.1.0",
+  "mongoose": "^8.0.0",
+  "dotenv": "^16.0.0",
+  "@prisma/client": "^6.18.0",
+  "prisma": "^6.18.0" (dev)
+}
+```
+
+### Environment Variables (.env)
+```
+DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/Project-2"
+PORT=3003
+```
+
+### Next Steps (Optional)
+- Remove unused `renderItem()` or consolidate rendering
+- Switch to cloud image storage (reduce DB size)
+- Remove `primaryColor`/`secondaryColor` from schema if not needed
+- Rename asset SVGs to video game theme
+- Add search functionality to frontend
+- Add pagination for large collections
+- Implement sorting/filtering UI
