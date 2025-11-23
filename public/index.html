@@ -20,7 +20,7 @@
     crossorigin
   >
   <link
-    href="https://fonts.googleapis.com/css2?family=Jost:wght@100..900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bungee&display=swap"
     rel="stylesheet"
   >
   <link
@@ -293,53 +293,51 @@
   </dialog>
 
   <main>
-    <h2>🎮 Video Game Collection</h2>
+    <h2>🎮 Gamez-DATAa</h2>
     <section id="contentArea"></section>
   </main>
 
   <section id="intro">
-    <h3>About</h3>
-    <p>Previously we explored approaches to <a
-        href="https://github.com/ixd-system-design/API-Endpoints-for-Publishing-and-Searching"
-      >Publishing Data</a> and <a href="https://github.com/ixd-system-design/Collecting-Data">Collecting Data</a> by
-      means of API Endpoints (backend) and HTML forms (frontend). Having thus addressed the first two letters of
-      <a href="https://developer.mozilla.org/en-US/docs/Glossary/CRUD">CRUD</a> ("Create" and Read"), let's now
-      implement the last two letters as well ("Update" and "Delete"). This will
-      allow us to manage the full lifecycle of data records in our database.
-    </p>
-    <p>In order to operate on existing documents, we need to identify them by ID. The following two endpoints will
-      assume that we pass along the ID of the item to be updated or deleted:
-    <ol>
-      <li>An Express endpoint listens for HTTP <a
-          href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/PUT"
-        >PUT</a> requests, with an ID parameter and a body payload (the updated data). Prisma
-        finds the corresponding document in the database and replaces it with the new data.</li>
-      <li>An Express endpoint listens for HTTP <a
-          href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/PUT"
-        >DELETE</a> requests, with an ID paramater passed along. Prisma finds the corresponding document and
-        removes it from the database.</li>
-    </ol>
-    </p>
+    <h3>About Video Game Collection Manager</h3>
     <p>
-      To support these new operations on the frontend, we have adjusted the form behaviour. When editing an item, the
-      ID of the item is stored in a hidden input field. This allows us to track which item is being edited, and send
-      the correct ID to the backend when submitting updates. We also use the ID in the display template, so that the
-      Edit and Delete buttons can function correctly, and so that we can identify which item to remove when deleting.
+      Welcome to your personal video game collection manager! This full-stack application helps you organize, track, 
+      and manage your gaming library with ease. Whether you're a casual player or a dedicated collector, keep all your 
+      game information in one convenient place.
     </p>
+    
+    <h3>Features</h3>
+    <ul>
+      <li>📝 <strong>Create</strong> new game entries with detailed information including title, genre, platform, publisher, and developer</li>
+      <li>📊 <strong>Track</strong> your progress with ratings, hours played, difficulty levels, and completion status</li>
+      <li>🖼️ <strong>Upload</strong> game cover images to visually organize your collection</li>
+      <li>✏️ <strong>Edit</strong> any game details whenever you need to update your information</li>
+      <li>🗑️ <strong>Delete</strong> games you no longer want in your collection</li>
+      <li>🔍 <strong>Search</strong> through your collection to quickly find specific titles</li>
+      <li>💾 <strong>Cloud Storage</strong> via MongoDB Atlas ensures your collection is safely stored and accessible anywhere</li>
+    </ul>
 
-    <h3>Learning Prompts</h3>
-    <p>Can you add a connection string to the NodeJS environment (e.g. .env file) for your own MongoDB Atlas Cluster?
+    <h3>How It Works</h3>
+    <p>
+      This app uses modern web technologies to provide a seamless experience:
     </p>
-    <p>Use MongoDB Compass to verify that your data collection form is working. </p>
-    <p>Try out all CRUD operations: Create a new game, Edit an existing game by clicking the Edit button, and Delete a game
-      you no longer need.</p>
-    <p>Explore the API endpoints in your browser: visit /data to see all games in JSON format, or try /search?terms=Zelda
-      to search for specific games.</p>
+    <ul>
+      <li><strong>Frontend:</strong> Clean, responsive interface built with HTML5, CSS3, and vanilla JavaScript</li>
+      <li><strong>Backend:</strong> Node.js with Express handles API requests and data operations</li>
+      <li><strong>Database:</strong> MongoDB stores your collection with Prisma as the data layer</li>
+      <li><strong>Full CRUD:</strong> Complete Create, Read, Update, and Delete operations for managing your games</li>
+    </ul>
+
+    <h3>Getting Started</h3>
+    <p>
+      Click the "Add New Game" button above to start building your collection. Fill in as much or as little 
+      information as you'd like—only the title and description are required. Track your gaming journey, 
+      remember which games you've completed, and never forget which titles are waiting in your backlog!
+    </p>
   </section>
 
   <footer>
     Created by <a href="https://nsitu.ca">Harold Sikkema</a> in the context of
-    Systems Design in the Interaction Design program at Sheridan College.
+    Systems Design in the Interaction Design program at Sheridan College and Edited by Keegan Honore.
   </footer>
 
   <script

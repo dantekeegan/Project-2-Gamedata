@@ -1,19 +1,22 @@
 body {
-
     height: 100%;
     width: 100%;
     margin: 0;
     text-align: center;
-    font-family: "Jost", sans-serif;
-    font-optical-sizing: auto;
+    font-family: "Bungee", sans-serif;
     font-weight: 400;
     font-style: normal;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(238, 227, 144)
+    background: linear-gradient(135deg, #a2a2a0 0%, #8a8a88 50%, #72726f 100%);
+    min-height: 100vh;
 }
 
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0adb1f;
+}
 
 h2 img {
     width: 2rem;
@@ -92,27 +95,29 @@ button.cancel:hover {
 
 /* Game card containers */
 .game-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s ease;
-  max-width: 100%;
+  background: #64647a;
+  border: 1px solid var(--border, #4a4a5e);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .game-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
 }
 
 .game-card header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #f0f0f0;
+  padding: 1rem;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .game-card .game-cover {
@@ -127,44 +132,56 @@ button.cancel:hover {
 .game-card h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: #fff;
   line-height: 1.3;
+  font-weight: 600;
 }
 
-.game-card p {
-  color: #666;
+.game-card small {
+  color: rgba(28, 242, 9, 0.7);
+  font-size: 0.75rem;
+}
+
+.game-card > p {
+  color: rgba(255,255,255,0.9);
   line-height: 1.4;
-  margin: 0.5rem 0;
+  margin: 0;
+  padding: 1rem;
   font-size: 0.875rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 .game-meta {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
-  margin: 1rem 0;
-  padding: 0.5rem 0;
+  padding: 1rem;
+  background: rgba(0,0,0,0.15);
 }
 
 .game-meta span {
-  background: #f0f0f0;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  color: #555;
+  background: rgba(255,255,255,0.15);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.game-card > p[style*="font-size:0.8rem"] {
+  color: rgba(28, 242, 9, 0.7) !important;
 }
 
 .game-card .actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #f0f0f0;
+  padding: 1rem;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .game-card .actions button {
@@ -217,12 +234,13 @@ dialog {
     max-height: 90vh;
     padding: 0;
     border: none;
-    border-radius: 1rem;
-    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    background: #64647a;
 }
 
 dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-container {
@@ -234,28 +252,32 @@ dialog::backdrop {
 
 .modal-header {
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
     flex-shrink: 0;
 }
 
 .modal-header h2 {
     margin: 0;
+    color: #fff;
 }
 
 .modal-header p {
     margin: 0.5rem 0 0 0;
-    color: #666;
+    color: rgba(16, 229, 12, 0.7);
 }
 
 .modal-body {
     padding: 1.5rem 2rem;
     overflow-y: auto;
     flex-grow: 1;
+    background: #64647a;
 }
 
 .modal-footer {
     padding: 1rem 2rem;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
     flex-shrink: 0;
     display: flex;
     gap: 1rem;
@@ -265,8 +287,31 @@ dialog::backdrop {
 /* Create button */
 #createButton {
     margin: 2rem auto;
-    padding: 1rem 2rem;
+    padding: 1rem 2rem 1rem 3.5rem;
     font-size: 1.1rem;
+    background: #4CAF50;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+#createButton:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+}
+
+#createButton::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"%3E%3Cpath d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/%3E%3C/svg%3E');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 #status p {
@@ -286,6 +331,9 @@ fieldset {
     align-items: start;
     margin-bottom: 1rem;
     border: none;
+    background: rgba(0,0,0,0.15);
+    padding: 1rem;
+    border-radius: 8px;
 }
 
 fieldset:has(textarea) {
@@ -294,11 +342,37 @@ fieldset:has(textarea) {
 
 legend {
     text-align: left;
+    color: #fff;
+    font-weight: 600;
+    padding: 0 0.5rem;
+}
+
+fieldset label {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+fieldset small {
+    color: rgba(45, 182, 32, 0.7);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
 }
 
 textarea {
-    padding: 1rem;
+    padding: 0.75rem;
     align-self: stretch;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: #333;
+    font-family: inherit;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: #fff;
 }
 
 
@@ -335,12 +409,25 @@ input {
 input,
 select,
 option {
-    padding: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: #333;
+    font-family: inherit;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: #fff;
 }
 
 /* Range slider doesn't need padding on the sides */
 input[type=range] {
     padding: 0.5rem 0rem;
+    background: transparent;
 }
 
 /* Color picker does not need padding at all */
@@ -349,9 +436,45 @@ input[type=color] {
     height: 36px;
     margin: 0;
     background: white;
-    border: 1px solid #aaa;
-    border-radius: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
     padding: 0.15rem 0.25rem;
+    cursor: pointer;
+}
+
+/* File input styling */
+input[type=file] {
+    padding: 0.75rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+input[type=file]:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+.image-preview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+}
+
+.image-preview img {
+    border-radius: 4px;
+    border: 2px solid rgba(255,255,255,0.2);
 }
 
 .validation {
@@ -380,7 +503,7 @@ textarea:user-invalid+.validation {
     border-radius: 1rem;
     padding: 1.5rem;
     margin: 1rem 0;
-    background: #ffffff66;
+    background: #1cd60bf1;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -409,7 +532,7 @@ textarea:user-invalid+.validation {
     align-items: center;
     gap: 0.5rem;
     font-size: 1.25rem;
-    color: #666;
+    color: #38e608;
     margin: 0.75rem 0 0 2rem;
 }
 
@@ -515,7 +638,7 @@ meter::-webkit-meter-suboptimum-value {
 
 /* Style for the 'even-less-good' range (e.g., low value range) */
 meter::-webkit-meter-even-less-good-value {
-    background: #e3c784;
+    background: #acabaa;
 }
 
 
