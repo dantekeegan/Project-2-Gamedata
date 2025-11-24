@@ -171,3 +171,46 @@ PORT=3003
 - Add search functionality to frontend
 - Add pagination for large collections
 - Implement sorting/filtering UI
+
+## Citations & Acknowledgments
+
+### Original Template
+- **Creator**: Harold Sikkema
+- **Source**: Systems Design, Interaction Design Program, Sheridan College
+- **Original Repository**: [Managing Data - CRUD Template](https://github.com/ixd-system-design)
+- **License**: Educational use
+
+### Modified By
+- **Developer**: Keegan Honore
+- **Date**: January 2025
+- **Modifications**: Migrated from cat adoption tracker to video game collection manager
+
+### AI Assistance
+- **Tool**: GitHub Copilot
+- **Date**: January 2025
+- **Assistance Provided**: 
+  - Code refactoring and debugging
+  - Prisma schema migration
+  - Frontend rendering logic updates
+  - CSS styling enhancements (Bungee font, gradient backgrounds, dark theme cards)
+  - Form validation and error handling
+  - API endpoint optimization
+  - Vercel deployment configuration
+
+### Technologies Used
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+), DOMPurify
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB Atlas, Mongoose, Prisma ORM
+- **Deployment**: Vercel
+- **Fonts**: Google Fonts (Bungee)
+- **Version Control**: Git, GitHub
+
+### References
+1. Express.js Documentation. (n.d.). Retrieved from https://expressjs.com/
+2. Prisma Documentation. (n.d.). Retrieved from https://www.prisma.io/docs/
+3. MongoDB Atlas Documentation. (n.d.). Retrieved from https://www.mongodb.com/docs/atlas/
+4. MDN Web Docs - CRUD Operations. (n.d.). Retrieved from https://developer.mozilla.org/en-US/docs/Glossary/CRUD
+5. Vercel Documentation. (n.d.). Retrieved from https://vercel.com/docs
+
+### License
+This project is for educational purposes. Original template by Harold Sikkema. Modifications and extensions by Keegan Honore with AI assistance from GitHub Copilot.

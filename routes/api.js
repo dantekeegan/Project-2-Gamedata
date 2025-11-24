@@ -53,7 +53,24 @@ router.get('/data', async (req, res) => {
     }
 })
 
-
+// ----- READ (GET) single item by ID -----
+// This is needed for the Edit functionality
+router.get('/data/:id', async (req, res) => {
+    try {
+        console.log('[API] GET /data/:id - Request for ID:', req.params.id)
+        const item = await prisma[model].findUnique({
+            where: { id: req.params.id }
+        })
+        console.log('[API] Found item:', item ? 'Yes' : 'No')
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found', id: req.params.id })
+        }
+        res.json(item)
+    } catch (err) {
+        console.error('[API] GET /data/:id error:', err)
+        res.status(500).json({ error: 'Failed to fetch item', details: err.message })
+    }
+})
 
 // ----- findMany() with search ------- 
 // Accepts optional search parameter to filter by name field

@@ -463,20 +463,46 @@ function renderGames(items) {
 }
 
 function attachRowListeners() {
+  console.log('[DEBUG] Attaching listeners to buttons')
   contentArea.querySelectorAll('button.edit').forEach(btn => {
-    btn.addEventListener('click', () => startEdit(btn.dataset.id))
+    console.log('[DEBUG] Edit button found with id:', btn.dataset.id)
+    btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      console.log('[DEBUG] Edit clicked for:', btn.dataset.id)
+      startEdit(btn.dataset.id)
+    })
   })
   contentArea.querySelectorAll('button.delete').forEach(btn => {
-    btn.addEventListener('click', () => deleteItem(btn.dataset.id))
+    btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      console.log('[DEBUG] Delete clicked for:', btn.dataset.id)
+      deleteItem(btn.dataset.id)
+    })
   })
 }
 
 async function startEdit(id) {
   try {
-    const res = await fetch(apiUrl(`/data/${id}`))
-    if (!res.ok) throw new Error('Fetch item failed')
+    console.log('[EDIT] Fetching item with ID:', id)
+    const url = apiUrl(`/data/${id}`)
+    console.log('[EDIT] Full URL:', url)
+    
+    const res = await fetch(url)
+    console.log('[EDIT] Response status:', res.status)
+    
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('[EDIT] Error response:', errorText)
+      throw new Error(`Fetch item failed: ${res.status} ${res.statusText} - ${errorText}`)
+    }
+    
     const item = await res.json()
+    console.log('[EDIT] Fetched item:', item)
+    
+    // Store ID for update
     document.getElementById('id').value = item.id || item._id
+    
+    // Populate form fields
     form.title.value = item.title || ''
     form.releaseDate.value = item.releaseDate ? item.releaseDate.substring(0,10) : ''
     form.genre.value = item.genre || ''
@@ -491,16 +517,20 @@ async function startEdit(id) {
     form.replayValue.value = item.replayValue ?? 0
     form.multiplayer.checked = !!item.multiplayer
     form.completed.checked = !!item.completed
+    
+    // Handle image preview
     if (item.image) {
       imagePreview.src = item.image
       imagePreview.style.display = 'block'
     } else {
       imagePreview.style.display = 'none'
     }
+    
     formDialog.showModal()
   } catch (e) {
-    console.error(e)
-    alert('Could not load item for edit.')
+    console.error('[EDIT] Full error:', e)
+    alert(`Could not load item for edit:\n${e.message}`)
+    showToast('Edit failed', 'error')
   }
 }
 
