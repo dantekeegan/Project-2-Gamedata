@@ -130,6 +130,41 @@ Project-2-Gamedata/
     └── assets/ (SVG icons - cat-themed, can be renamed later)
 ```
 
+### Bug Fixes & Solutions
+
+#### Edit Button Issue (Resolved - Jan 2025)
+**Problem**: Edit button returned 404 error when clicked
+- Error: `Fetch item failed: 404 Not Found - Cannot GET /data/:id`
+- Root cause: Missing GET `/data/:id` endpoint in `routes/api.js`
+- The API only had GET `/data` (list all) but not GET `/data/:id` (single item)
+
+**Solution**: Added GET `/data/:id` endpoint to `routes/api.js`
+```javascript
+router.get('/data/:id', async (req, res) => {
+  try {
+    const item = await prisma[model].findUnique({
+      where: { id: req.params.id }
+    })
+    if (!item) {
+      return res.status(404).json({ error: 'Item not found' })
+    }
+    res.json(item)
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch item' })
+  }
+})
+```
+
+**Files Modified**:
+- `routes/api.js` - Added GET `/data/:id` endpoint
+- `public/script.js` - Enhanced error logging in `startEdit()` function
+
+**Debug Steps Taken**:
+1. Added console logging to track button clicks and ID values
+2. Checked API routes file - discovered missing endpoint
+3. Added proper error handling with detailed messages
+4. Tested locally before deployment
+
 ### Known Issues / Tech Debt
 - Two rendering functions coexist: `renderItem()` (detailed) and `renderGames()` (simple cards)
 - Currently using `renderGames()` for display, `renderItem()` unused but kept
@@ -214,3 +249,142 @@ PORT=3003
 
 ### License
 This project is for educational purposes. Original template by Harold Sikkema. Modifications and extensions by Keegan Honore with AI assistance from GitHub Copilot.
+
+---
+
+## Development Log - User Prompts & Changes
+
+This section documents all user-requested customizations and changes made during development.
+
+### Design & Styling Changes
+1. **Game card styling** - Updated to match dark theme (#64647a background)
+   - Changed from white cards to dark purple-gray
+   - Added grid layout with rounded 12px borders
+   - Implemented hover effects (translateY, box-shadow)
+
+2. **Add New Game button** - Created custom SVG icon
+   - Added plus (+) icon using inline SVG data URI
+   - Green background (#4CAF50) with hover effects
+   - Positioned icon to left of text
+
+3. **Form styling** - Matched to game card design
+   - Dark modal background (#64647a)
+   - Semi-transparent input backgrounds
+   - Green focus borders (#4CAF50)
+   - Dark fieldsets with rgba(0,0,0,0.15)
+
+4. **Choose Image button** - Styled like Add New Game button
+   - Green background with hover effect
+   - Removed default file selector button
+   - Added smooth transitions
+
+5. **Font change** - Switched to Bungee font
+   - Replaced Jost with Bungee from Google Fonts
+   - Applied to entire body
+   - Bold, playful gaming aesthetic
+
+6. **Header colors** - Bright green (#0adb1f)
+   - All h1-h6 headings
+   - Matches gaming theme
+
+7. **Background gradient** - Linear gradient
+   - Changed from solid gray to diagonal gradient
+   - Colors: #a2a2a0 → #8a8a88 → #72726f
+   - 135deg angle
+
+8. **Publisher/Developer text colors**
+   - Publisher: Bright green (rgba(28, 242, 9, 0.7))
+   - Developer: Initially green, then reverted to green
+   - Small tags with game details
+
+### Content Changes
+9. **About section rewrite** - Better description
+   - Changed from technical CRUD explanation
+   - User-friendly feature list with emojis
+   - "How It Works" section
+   - "Getting Started" guide
+   - Focused on video game collection use case
+
+### Functional Fixes
+10. **Edit button not working** - Fixed 404 error
+    - **Problem**: GET `/data/:id` endpoint missing
+    - **Solution**: Added endpoint to `routes/api.js`
+    - **Debugging**: Added console logging throughout
+    - **Files modified**: `routes/api.js`, `public/script.js`
+
+### Background Attempts
+11. **Background image** - Attempted, then reverted
+    - User requested gaming-themed background image
+    - Temporarily added, then chose to keep gradient instead
+    - Gradient provided better readability
+
+### Deployment
+12. **Vercel deployment** - Published to production
+    - Created `vercel.json` configuration
+    - Set up environment variables (DATABASE_URL)
+    - Deployed via GitHub integration
+    - Troubleshot MongoDB connection issues
+
+13. **Git workflow** - Push to GitHub
+    - Resolved divergent branches
+    - Used merge strategy
+    - Committed all changes
+    - Auto-deployed to Vercel
+
+### Documentation
+14. **System design diagram** - Created SYSTEM-DESIGN.md
+    - Mermaid architecture diagram
+    - 3-tier architecture visualization
+    - Technology stack breakdown
+
+15. **Citations** - Added acknowledgments
+    - Original creator (Harold Sikkema)
+    - AI assistance (GitHub Copilot)
+    - Technologies used
+    - References list
+
+16. **Development log** - This section
+    - Comprehensive prompt history
+    - Chronological change log
+    - Solution documentation
+
+### Testing & Iteration
+17. **Local testing** - Run server locally
+    - `npm run start` on localhost:3003
+    - Browser console debugging
+    - Network tab inspection
+
+18. **File saving** - Explained auto-save behavior
+    - All changes saved automatically
+    - Optional backup methods (zip, git)
+
+### Color Customizations
+- Card background: #64647a
+- Header text: #0adb1f
+- Publisher text: rgba(28, 242, 9, 0.7)
+- Button green: #4CAF50
+- Background gradient: #a2a2a0 → #72726f
+
+### Key Learning Points
+- Edit functionality requires both frontend button AND backend endpoint
+- Vercel deployment needs environment variables configured separately
+- Base64 images increase database size but simplify storage
+- Console logging essential for debugging API issues
+- Git merge strategy preserves all history
+
+---
+
+## Summary of Changes from Original Template
+
+**Original**: Cat adoption tracker with simple form
+**Modified**: Professional video game collection manager with:
+- Dark gaming theme
+- Custom Bungee font
+- Image upload with preview
+- Comprehensive game metadata
+- Full CRUD with edit functionality
+- Toast notifications
+- Status monitoring
+- Vercel deployment ready
+- Gradient background
+- Professional About section
