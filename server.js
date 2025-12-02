@@ -3,10 +3,29 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import pkg from 'express-openid-connect'
+const { auth, requiresAuth } = pkg
 
 dotenv.config()
 // Initialize Express app
 const app = express()
+
+// Auth0 Configuration (optional - only if all env vars are set)
+if (process.env.AUTH0_SECRET && process.env.AUTH0_CLIENT_ID && process.env.AUTH0_ISSUER_BASE_URL) {
+  const authConfig = {
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.AUTH0_SECRET,
+    baseURL: process.env.BASE_URL || 'http://localhost:3003',
+    clientID: process.env.AUTH0_CLIENT_ID,
+    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL
+  }
+  // Auth router attaches /login, /logout, and /callback routes
+  app.use(auth(authConfig))
+  console.log('[Auth0] Enabled')
+} else {
+  console.log('[Auth0] Disabled - missing environment variables')
+}
 
 // MongoDB connect (supports MONGODB_URI or DATABASE_URL)
 const MONGODB_URI = process.env.MONGODB_URI || process.env.DATABASE_URL
@@ -36,6 +55,21 @@ app.use(express.json({ limit: '10mb' }))
 app.get('/status', (req, res) => {
   res.json({ ok: true, mongo: mongoReady })
 })
+
+// Auth status endpoint
+app.get('/auth-status', (req, res) => {
+  res.json({
+    isAuthenticated: req.oidc?.isAuthenticated() || false,
+    user: req.oidc?.user || null
+  })
+})
+
+// Protected profile route - requires authentication (only if Auth0 is enabled)
+if (process.env.AUTH0_SECRET && process.env.AUTH0_CLIENT_ID && process.env.AUTH0_ISSUER_BASE_URL) {
+  app.get('/profile', requiresAuth(), (req, res) => {
+    res.send(JSON.stringify(req.oidc.user, null, 2))
+  })
+}
 
 // Our API is defined in a separate module to keep things tidy.
 // Let's import our API endpoints and activate them.

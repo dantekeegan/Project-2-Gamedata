@@ -27,6 +27,11 @@ router.post('/data', async (req, res) => {
         // Remove the id field from request body if it exists
         // MongoDB will auto-generate an ID for new records
         const { id, ...createData } = req.body
+        
+        // Add user ID if authenticated
+        if (req.oidc?.isAuthenticated()) {
+            createData.userId = req.oidc.user.sub
+        }
 
         const created = await prisma[model].create({
             data: createData
@@ -42,8 +47,14 @@ router.post('/data', async (req, res) => {
 // ----- READ (GET) list ----- 
 router.get('/data', async (req, res) => {
     try {
-        // fetch first 100 records from the database with no filter
+        // Filter by user if authenticated, otherwise show all
+        const where = {}
+        if (req.oidc?.isAuthenticated()) {
+            where.userId = req.oidc.user.sub
+        }
+        
         const result = await prisma[model].findMany({
+            where,
             take: 100
         })
         res.send(result)
@@ -105,9 +116,19 @@ router.get('/search', async (req, res) => {
 // After updating the database we send the updated record back to the frontend.
 router.put('/data/:id', async (req, res) => {
     try {
+        // Check if user owns this record
+        if (req.oidc?.isAuthenticated()) {
+            const existing = await prisma[model].findUnique({
+                where: { id: req.params.id }
+            })
+            if (existing && existing.userId !== req.oidc.user.sub) {
+                return res.status(403).send({ error: 'Not authorized to update this record' })
+            }
+        }
+        
         // Remove the id from the request body if it exists
         // The id should not be in the data payload for updates
-        const { id, ...updateData } = req.body
+        const { id, userId, ...updateData } = req.body
 
         // Prisma update returns the updated version by default
         const updated = await prisma[model].update({
@@ -127,6 +148,16 @@ router.put('/data/:id', async (req, res) => {
 // This is the 'D' of CRUD
 router.delete('/data/:id', async (req, res) => {
     try {
+        // Check if user owns this record
+        if (req.oidc?.isAuthenticated()) {
+            const existing = await prisma[model].findUnique({
+                where: { id: req.params.id }
+            })
+            if (existing && existing.userId !== req.oidc.user.sub) {
+                return res.status(403).send({ error: 'Not authorized to delete this record' })
+            }
+        }
+        
         const result = await prisma[model].delete({
             where: { id: req.params.id }
         })

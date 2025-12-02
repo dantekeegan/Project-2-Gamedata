@@ -412,9 +412,51 @@ async function updateStatus() {
   }
 }
 
+// Check authentication status and update UI
+async function checkAuth() {
+  try {
+    const res = await fetch(apiUrl('/auth-status'))
+    if (!res.ok) return { isAuthenticated: false, user: null }
+    const data = await res.json()
+    updateAuthUI(data)
+    return data
+  } catch (e) {
+    console.error('[AUTH] Check failed:', e)
+    return { isAuthenticated: false, user: null }
+  }
+}
+
+function updateAuthUI(authData) {
+  const userInfo = document.getElementById('userInfo')
+  const createButton = document.getElementById('createButton')
+  
+  if (authData.isAuthenticated && authData.user) {
+    const userName = authData.user.name || authData.user.email || 'User'
+    userInfo.innerHTML = `
+      Welcome, ${sanitize(userName)}! 
+      <a href="/logout" style="color: #ff6b6b; margin-left: 1rem;">Logout</a>
+    `
+    createButton.style.display = 'block'
+  } else {
+    userInfo.innerHTML = `
+      <a href="/login" style="color: #4CAF50; font-size: 1.1rem;">Login to manage games</a>
+    `
+    createButton.style.display = 'none'
+  }
+}
+
+// Store current auth state
+let currentUser = null
+
 // Initial kick
-updateStatus()
-loadGames()
+async function init() {
+  const authData = await checkAuth()
+  currentUser = authData.user
+  updateStatus()
+  loadGames()
+}
+
+init()
 
 // Periodically refresh status & list (optional)
 setInterval(updateStatus, 15000)

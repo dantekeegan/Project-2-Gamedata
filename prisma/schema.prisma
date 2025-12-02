@@ -12,6 +12,7 @@ datasource db {
 
 model videogames {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String?   // Auth0 user ID
   title           String?
   releaseDate     DateTime? @db.Date
   image           String?   // Base64 or URL
