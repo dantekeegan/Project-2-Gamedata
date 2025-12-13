@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "API Endpoints for Publishing and Searching",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.x"
+  },
   "scripts": {
     "setup": "npm install",
-    "start": "node --watch --env-file=.env server.js",
-    "postinstall": "prisma generate"
+    "start": "node server.js",
+    "dev": "node --watch --env-file=.env server.js"
   },
   "keywords": [],
   "author": "",
