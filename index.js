@@ -59,12 +59,16 @@ if (!MONGODB_URI) {
 }
 
 // Serve static files from /public folder (useful when running Node locally, optional on Vercel).
-app.use(express.static('public'))
-// Define index.html as the root explicitly (useful on Vercel, optional when running Node locally).
-app.get('/', (req, res) => { res.redirect('/index.html') })
-
 // Enable express to parse JSON data (with larger limit for base64 images)
 app.use(express.json({ limit: '10mb' }))
+
+// Serve static files from public directory
+app.use(express.static('public'))
+
+// Define index.html as the root explicitly
+app.get('/', (req, res) => { 
+  res.sendFile('index.html', { root: './public' }) 
+})
 
 // Status endpoint for frontend
 app.get('/status', (req, res) => {
