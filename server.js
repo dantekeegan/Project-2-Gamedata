@@ -86,6 +86,11 @@ if (process.env.AUTH0_SECRET && process.env.AUTH0_CLIENT_ID && process.env.AUTH0
   })
 }
 
+// Test route for Vercel debugging
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Server is working!', timestamp: new Date().toISOString() })
+})
+
 // Our API is defined in a separate module to keep things tidy.
 // Let's import our API endpoints and activate them.
 import apiRoutes from './routes/api.js'
