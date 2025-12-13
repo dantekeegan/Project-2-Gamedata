@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width initial-scale=1"
+  />
+
+  <title>Video Game Collection Manager</title>
+  
+  <!-- Favicon - Game Controller Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+  <!--  DOMPurify cleans up HTML to prevent XSS attacks
+  https://www.jsdelivr.com/package/npm/dompurify  -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.3.0/dist/purify.min.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <h1>Video Game Collection Manager</h1>
+    <div id="authButtons" style="margin: 1rem 0;">
+      <span id="userInfo" style="color: #0adb1f; font-weight: bold;"></span>
+    </div>
+  </header>
+  <section id="status">
+    <p id="readyStatus">Upload Your Favourite Games here for others to see, enjoy!!!!</p>
+    <p id="notReadyStatus">MongoDB is not connected. Please check your connection string in <code>.env</code> file.
+    </p>
+  </section>
+  <button id="createButton">Add New Game</button>
+
+  <dialog id="formDialog">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>🎮 Add a Video Game</h2>
+        <p>Add a game to your collection</p>
+      </div>
+
+      <div class="modal-body">
+        <form
+          id="myForm"
+          method="dialog"
+        >
+      <!-- Hidden field to store ID for updates -->
+      <input
+        type="hidden"
+        name="id"
+        id="id"
+      />
+
+      
+
+
+      <fieldset>
+        <label for="title">Game Title</label>
+        <input
+          required
+          type="text"
+          name="title"
+          id="title"
+          placeholder="e.g. The Legend of Zelda"
+          autocomplete="off"
+        />
+        <small class="validation">Title is required</small>
+      </fieldset>
+
+      <fieldset>
+        <label for="releaseDate">Release Date</label>
+        <input
+          type="date"
+          name="releaseDate"
+          id="releaseDate"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="image">Cover Image</label>
+        <input
+          type="file"
+          name="image"
+          id="image"
+          accept="image/*"
+        />
+        <small>Upload an image to use as the game icon.</small>
+        <div class="image-preview">
+          <img id="imagePreview" alt="Preview" style="display:none; max-width:120px; height:auto;" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="genre">Genre</label>
+        <select
+          name="genre"
+          id="genre"
+        >
+          <option
+            value=""
+            disabled
+            selected
+          >Select a Genre</option>
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <option value="RPG">RPG</option>
+          <option value="Strategy">Strategy</option>
+          <option value="Simulation">Simulation</option>
+          <option value="Sports">Sports</option>
+          <option value="Racing">Racing</option>
+          <option value="Fighting">Fighting</option>
+          <option value="Platformer">Platformer</option>
+          <option value="Puzzle">Puzzle</option>
+          <option value="Shooter">Shooter</option>
+          <option value="Horror">Horror</option>
+          <option value="Survival">Survival</option>
+          <option value="MMORPG">MMORPG</option>
+          <option value="Other">Other</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <label for="platform">Platform</label>
+        <select
+          name="platform"
+          id="platform"
+        >
+          <option
+            value=""
+            disabled
+            selected
+          >Select a Platform</option>
+          <option value="PC">PC</option>
+          <option value="PlayStation 5">PlayStation 5</option>
+          <option value="PlayStation 4">PlayStation 4</option>
+          <option value="Xbox Series X/S">Xbox Series X/S</option>
+          <option value="Xbox One">Xbox One</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+          <option value="Mobile">Mobile</option>
+          <option value="Multi-Platform">Multi-Platform</option>
+          <option value="Other">Other</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <label for="publisher">Publisher</label>
+        <input
+          type="text"
+          name="publisher"
+          id="publisher"
+          placeholder="e.g. Nintendo"
+          autocomplete="off"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="developer">Developer</label>
+        <input
+          type="text"
+          name="developer"
+          id="developer"
+          placeholder="e.g. Nintendo EPD"
+          autocomplete="off"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="rating">Rating</label>
+        <small>Rate this game out of 10</small>
+        <input
+          type="number"
+          min="0"
+          max="10"
+          step="0.1"
+          name="rating"
+          id="rating"
+          placeholder="e.g. 8.5"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="price">Price (USD)</label>
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          name="price"
+          id="price"
+          placeholder="e.g. 59.99"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="hoursPlayed">Hours Played</label>
+        <input
+          type="number"
+          min="0"
+          step="1"
+          name="hoursPlayed"
+          id="hoursPlayed"
+          placeholder="e.g. 45"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="description">Description</label>
+        <small>Provide a brief summary of the game.</small>
+        <textarea
+          placeholder="Game description..."
+          required
+          minlength="20"
+          name="description"
+          id="description"
+          rows="6"
+          cols="30"
+        ></textarea>
+        <small class="validation">Description must be at least 20 characters.</small>
+      </fieldset>
+
+      <fieldset>
+        <label for="difficulty">Difficulty</label>
+        <small>How challenging is this game?</small>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          name="difficulty"
+          id="difficulty"
+        />
+      </fieldset>
+
+      <fieldset>
+        <label for="replayValue">Replay Value</label>
+        <small>How replayable is this game?</small>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          name="replayValue"
+          id="replayValue"
+        />
+      </fieldset>
+
+      <fieldset>
+        <legend>Progress & Play Style</legend>
+        <label for="multiplayer">
+          <input
+            type="checkbox"
+            name="multiplayer"
+            id="multiplayer"
+          />
+          <span>Multiplayer</span>
+        </label>
+        <label for="completed">
+          <input
+            type="checkbox"
+            name="completed"
+            id="completed"
+          />
+          <span>Completed</span>
+        </label>
+      </fieldset>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="save"
+          id="saveButton"
+        >Save</button>
+        <button
+          type="button"
+          class="cancel"
+          id="cancelButton"
+        >Cancel</button>
+      </div>
+    </div>
+  </dialog>
+
+  <main>
+    <h2>🎮 Gamez-DATAa</h2>
+    <section id="contentArea"></section>
+  </main>
+
+  <section id="intro">
+    <h3>About Video Game Collection Manager</h3>
+    <p>
+      Welcome to your personal video game collection manager! This full-stack application helps you organize, track, 
+      and manage your gaming library with ease. Whether you're a casual player or a dedicated collector, keep all your 
+      game information in one convenient place.
+    </p>
+    
+    <h3>Features</h3>
+    <ul>
+      <li>📝 <strong>Create</strong> new game entries with detailed information including title, genre, platform, publisher, and developer</li>
+      <li>📊 <strong>Track</strong> your progress with ratings, hours played, difficulty levels, and completion status</li>
+      <li>🖼️ <strong>Upload</strong> game cover images to visually organize your collection</li>
+      
+      <li>🗑️ <strong>Delete</strong> games you no longer want in your collection</li>
+      
+      <li>💾 <strong>Cloud Storage</strong> via MongoDB Atlas ensures your collection is safely stored and accessible anywhere</li>
+    </ul>
+
+    <h3>How It Works</h3>
+    <p>
+      This app uses modern web technologies to provide a seamless experience:
+    </p>
+    <ul>
+      <li><strong>Frontend:</strong> Clean, responsive interface built with HTML5, CSS3, and vanilla JavaScript</li>
+      <li><strong>Backend:</strong> Node.js with Express handles API requests and data operations</li>
+      <li><strong>Database:</strong> MongoDB stores your collection with Prisma as the data layer</li>
+      <li><strong>Full CRUD:</strong> Complete Create, Read, Update, and Delete operations for managing your games</li>
+    </ul>
+
+    <h3>Getting Started</h3>
+    <p>
+      Click the "Add New Game" button above to start building your collection. Fill in as much or as little 
+      information as you'd like—only the title and description are required. Track your gaming journey, 
+      remember which games you've completed, and never forget which titles are waiting in your backlog!
+    </p>
+  </section>
+
+  <footer>
+    Created by <a href="https://nsitu.ca">Harold Sikkema</a> in the context of
+    Systems Design in the Interaction Design program at Sheridan College and Edited by Keegan Honore.
+  </footer>
+
+  <script
+    src="script.js"
+    type="module"
+  ></script>
+
+</body>
+
+</html>

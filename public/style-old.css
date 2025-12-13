@@ -1,0 +1,701 @@
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #a2a2a0 0%, #8a8a88 50%, #72726f 100%);
+    min-height: 100vh;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0adb1f;
+}
+
+h2 img {
+    width: 2rem;
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.example {
+    border: 1px solid #666;
+    border-radius: 2rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+}
+
+.example h2 {
+    margin: 0;
+}
+
+.example p {
+    margin: 0;
+}
+
+
+footer {
+    text-align: center;
+    padding: 3rem;
+}
+
+
+
+header p,
+header ul {
+    margin: 1rem;
+}
+
+#intro {
+    max-width: 60rem;
+    margin: auto;
+    text-align: left;
+}
+
+button {
+    border: 0;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    color: white;
+    cursor: pointer;
+}
+
+button.save {
+    background: rgb(3, 136, 3);
+}
+
+button.save:hover {
+    background-color: rgb(3, 103, 3);
+}
+
+button.cancel {
+    background: rgb(134, 134, 134);
+}
+
+button.cancel:hover {
+    background: rgb(101, 101, 101);
+}
+
+
+/* Game card containers */
+.game-card {
+  background: #64647a;
+  border: 1px solid var(--border, #4a4a5e);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.game-card:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+.game-card header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.game-card .game-cover {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.game-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #fff;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.game-card small {
+  color: rgba(28, 242, 9, 0.7);
+  font-size: 0.75rem;
+}
+
+.game-card > p {
+  color: rgba(255,255,255,0.9);
+  line-height: 1.4;
+  margin: 0;
+  padding: 1rem;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.game-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: rgba(0,0,0,0.15);
+}
+
+.game-meta span {
+  background: rgba(255,255,255,0.15);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.game-card > p[style*="font-size:0.8rem"] {
+  color: rgba(28, 242, 9, 0.7) !important;
+}
+
+.game-card .actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.game-card .actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s ease;
+}
+
+.game-card .actions button.edit {
+  background: #4CAF50;
+  color: white;
+}
+
+.game-card .actions button.edit:hover {
+  background: #45a049;
+}
+
+.game-card .actions button.delete {
+  background: #f44336;
+  color: white;
+}
+
+.game-card .actions button.delete:hover {
+  background: #da190b;
+}
+
+#contentArea {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1200px) {
+    #contentArea {
+        grid-template-columns: auto;
+    }
+}
+
+/* Dialog styling */
+dialog {
+    max-width: 60rem;
+    width: 90%;
+    max-height: 90vh;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    background: #64647a;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 90vh;
+}
+
+.modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.modal-header p {
+    margin: 0.5rem 0 0 0;
+    color: rgba(16, 229, 12, 0.7);
+}
+
+.modal-body {
+    padding: 1.5rem 2rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    background: #64647a;
+}
+
+.modal-footer {
+    padding: 1rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
+    flex-shrink: 0;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Create button */
+#createButton {
+    margin: 2rem auto;
+    padding: 1rem 2rem 1rem 3.5rem;
+    font-size: 1.1rem;
+    background: #4CAF50;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+#createButton:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+}
+
+#createButton::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"%3E%3Cpath d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/%3E%3C/svg%3E');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#status p {
+    display: none;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-bottom: 1rem;
+    border: none;
+    background: rgba(0,0,0,0.15);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+fieldset:has(textarea) {
+    width: 100%;
+}
+
+legend {
+    text-align: left;
+    color: #fff;
+    font-weight: 600;
+    padding: 0 0.5rem;
+}
+
+fieldset label {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+fieldset small {
+    color: rgba(45, 182, 32, 0.7);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+textarea {
+    padding: 0.75rem;
+    align-self: stretch;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: #333;
+    font-family: inherit;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: #fff;
+}
+
+
+
+
+fieldset:has(input[type=checkbox]) {
+    gap: 0.5rem;
+}
+
+/* layout checkboxes and radio buttons horizontally */
+label:has(input[type=radio]),
+label:has(input[type=checkbox]) {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* make radio and checkbox elements a bit bigger*/
+input[type=radio],
+input[type=checkbox] {
+    margin: 0;
+    padding: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+
+/* Set accent colour for inputs. */
+input {
+    accent-color: rgb(3, 136, 3);
+}
+
+/* Style default padding for form elements */
+input,
+select,
+option {
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: #333;
+    font-family: inherit;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: #fff;
+}
+
+/* Range slider doesn't need padding on the sides */
+input[type=range] {
+    padding: 0.5rem 0rem;
+    background: transparent;
+}
+
+/* Color picker does not need padding at all */
+input[type=color] {
+    width: 108px;
+    height: 36px;
+    margin: 0;
+    background: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 0.15rem 0.25rem;
+    cursor: pointer;
+}
+
+/* File input styling */
+input[type=file] {
+    padding: 0.75rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+input[type=file]:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+.image-preview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+}
+
+.image-preview img {
+    border-radius: 4px;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.validation {
+    color: #d32f2f;
+    display: none;
+    margin-top: 0.25rem;
+}
+
+/* Invalid input styling - only show after user interaction */
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+    border: 2px solid #d32f2f;
+    background-color: #ffebee;
+}
+
+/* NOTE: the plus sign (+) in CSS is a sibling selector */
+input:user-invalid+.validation,
+select:user-invalid+.validation,
+textarea:user-invalid+.validation {
+    display: block;
+}
+
+/*  card styles */
+.item-card {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background: #1cd60bf1;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.item-card h3 {
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
+    color: #333;
+}
+
+.item-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.microchip-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    color: #38e608;
+    margin: 0.75rem 0 0 2rem;
+}
+
+.item-info {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+}
+
+.item-info p {
+    margin: 0.5rem 0;
+}
+
+section.breed,
+section.adoption,
+section.food {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    ;
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+}
+
+section.food img,
+section.adoption img {
+    width: 1.5rem;
+}
+
+
+
+/* styling for the calendar widget*/
+.calendar {
+    display: flex;
+    flex-direction: column;
+    width: 4rem;
+    text-align: center;
+    margin: 1rem 0 1rem auto;
+    background: #3b3b3b66;
+    color: #fff;
+    border-radius: 1rem;
+}
+
+.calendar .born {
+    margin: 0;
+    padding-top: 0.5rem;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.calendar .born img {
+    width: 1.5rem;
+}
+
+.calendar .year {
+    border-top: 1px solid white;
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.calendar .month {
+    border-top: 1px solid white;
+    text-transform: uppercase;
+    background: #3b3b3b66;
+    font-weight: 700;
+}
+
+.calendar .day {
+    border-top: 1px solid white;
+    background: #3b3b3bbb;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+
+.description {
+    max-width: 32rem;
+}
+
+
+/* Set accent colour for meter. */
+
+/* Style the background bar of the meter */
+meter::-webkit-meter-bar {
+    background: #fff;
+    /* background color of the meter */
+}
+
+/* Style for the 'optimum' range (e.g., the highest value range) */
+meter::-webkit-meter-optimum-value {
+    background: #0c5b3a;
+}
+
+/* Style for the 'sub-optimum' range (e.g., medium value range) */
+meter::-webkit-meter-suboptimum-value {
+    background: #7b287c;
+}
+
+/* Style for the 'even-less-good' range (e.g., low value range) */
+meter::-webkit-meter-even-less-good-value {
+    background: #acabaa;
+}
+
+
+
+.stats .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 300;
+    padding: 0 3rem 0 1rem;
+
+}
+
+.stat span {
+    width: 5rem;
+    text-align: right;
+}
+
+.stats meter {
+    flex-grow: 1;
+    min-width: 8rem;
+    height: 2rem;
+}
+
+.item-icon {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    -webkit-mask-image: url(./assets/cat.svg);
+    mask-image: url(./assets/cat.svg);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+
+.item-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.edit-btn {
+    background: rgb(3, 136, 3);
+}
+
+.edit-btn:hover {
+    background-color: rgb(3, 103, 3);
+}
+
+.delete-btn {
+    background: rgb(211, 47, 47);
+}
+
+.delete-btn:hover {
+    background-color: rgb(183, 28, 28);
+}

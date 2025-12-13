@@ -268,22 +268,18 @@ async function loadGames() {
     const res = await fetch(apiUrl('/data'))
     const games = await res.json()
     
-    // Check auth status
-    const authRes = await fetch(apiUrl('/auth-status'))
-    const authData = await authRes.json()
-    
     if (!Array.isArray(games) || games.length === 0) {
       cardsGrid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1;">
           <h3>No games in your collection yet</h3>
-          <p>${authData.isAuthenticated ? 'Click "Add New Game" to start building your library!' : 'Login to add games to your collection!'}</p>
+          <p>Click "Add New Game" to start building your library!</p>
         </div>
       `
       statsGrid.style.display = 'none'
       return
     }
     
-    renderGames(games, authData)
+    renderGames(games)
     updateStats(games)
     statsGrid.style.display = 'grid'
     
@@ -302,10 +298,8 @@ async function loadGames() {
 // ========================================
 // RENDER GAMES
 // ========================================
-function renderGames(games, authData) {
+function renderGames(games) {
   const cardsGrid = document.getElementById('cardsGrid')
-  const isAuthenticated = authData?.isAuthenticated || false
-  const currentUserId = authData?.user?.sub || null
   
   cardsGrid.innerHTML = games.map(game => {
     const imgHtml = game.image 
@@ -315,21 +309,6 @@ function renderGames(games, authData) {
     const badge = game.completed 
       ? `<span class="card-badge badge-green">Completed</span>`
       : `<span class="card-badge badge-yellow">In Progress</span>`
-    
-    // Check if current user owns this game
-    const isOwner = isAuthenticated && game.userId === currentUserId
-    
-    // Only show edit/delete buttons if user is logged in and owns the game
-    const actionsHtml = isOwner ? `
-      <div class="card-actions">
-        <button class="edit" data-id="${sanitize(game.id)}">
-          <i data-lucide="edit-2"></i> Edit
-        </button>
-        <button class="delete" data-id="${sanitize(game.id)}">
-          <i data-lucide="trash-2"></i> Delete
-        </button>
-      </div>
-    ` : ''
     
     return `
       <div class="gaming-card" data-id="${sanitize(game.id)}">
@@ -361,7 +340,14 @@ function renderGames(games, authData) {
             </div>
           ` : ''}
           
-          ${actionsHtml}
+          <div class="card-actions">
+            <button class="edit" data-id="${sanitize(game.id)}">
+              <i data-lucide="edit-2"></i> Edit
+            </button>
+            <button class="delete" data-id="${sanitize(game.id)}">
+              <i data-lucide="trash-2"></i> Delete
+            </button>
+          </div>
         </div>
       </div>
     `
