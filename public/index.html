@@ -1,8 +1,23 @@
-<!DOCTYPE html>
+cd "/Users/keeganhonore/Project 2 Gamedata/Project-2-Gamedata" && \
+git add server.js && \
+git commit -m "🐛 Add debug endpoint to test Vercel deployment
+
+- Added /test endpoint to check if files exist
+- Will show if public folder is accessible on Vercel
+- Helps diagnose deployment issues" && \
+git push origin main && \
+echo "" && \
+echo "✅ Pushed debug endpoint!" && \
+echo "" && \
+echo "After Vercel deploys (2 min), visit:" && \
+echo "  https://your-app.vercel.app/test" && \
+echo "" && \
+echo "This will show if Vercel can find your public files"<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://fonts.googleapis.com https://cdn.auth0.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;">
   <title>Video Game Collection Manager</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -9,6 +9,21 @@ const { auth, requiresAuth } = pkg
 dotenv.config()
 // Initialize Express app
 const app = express()
+const port = process.env.PORT || 3003
+
+// Add CSP headers for Auth0 compatibility - TEMPORARILY DISABLED
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "default-src 'self'; " +
+//     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; " +
+//     "style-src 'self' 'unsafe-inline' https: http:; " +
+//     "font-src 'self' https: http: data:; " +
+//     "img-src 'self' data: https: http:; " +
+//     "connect-src 'self' https: http:"
+//   )
+//   next()
+// })
 
 // Auth0 Configuration (optional - only if all env vars are set)
 if (process.env.AUTH0_SECRET && process.env.AUTH0_CLIENT_ID && process.env.AUTH0_ISSUER_BASE_URL) {
@@ -76,7 +91,6 @@ if (process.env.AUTH0_SECRET && process.env.AUTH0_CLIENT_ID && process.env.AUTH0
 import apiRoutes from './routes/api.js'
 app.use('/', apiRoutes)
 
-const port = process.env.PORT || 3003
 app.listen(port, () => {
   console.log(`Express is live at http://localhost:${port}`)
 })
