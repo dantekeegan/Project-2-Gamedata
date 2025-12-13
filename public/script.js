@@ -215,9 +215,15 @@ async function checkAuthStatus() {
     const res = await fetch(apiUrl('/auth-status'))
     const data = await res.json()
     
+    // Store auth state globally
+    window.isAuthenticated = data.isAuthenticated
+    window.currentUserId = data.user?.sub || null
+    
     updateAuthUI(data)
   } catch (err) {
     console.error('Auth check failed:', err)
+    window.isAuthenticated = false
+    window.currentUserId = null
     updateAuthUI({ isAuthenticated: false })
   }
 }
@@ -310,6 +316,19 @@ function renderGames(games) {
       ? `<span class="card-badge badge-green">Completed</span>`
       : `<span class="card-badge badge-yellow">In Progress</span>`
     
+    // Only show edit/delete if user is authenticated AND owns this game
+    const canEdit = window.isAuthenticated && game.userId === window.currentUserId
+    const actionsHTML = canEdit ? `
+      <div class="card-actions">
+        <button class="edit" data-id="${sanitize(game.id)}">
+          <i data-lucide="edit-2"></i> Edit
+        </button>
+        <button class="delete" data-id="${sanitize(game.id)}">
+          <i data-lucide="trash-2"></i> Delete
+        </button>
+      </div>
+    ` : ''
+    
     return `
       <div class="gaming-card" data-id="${sanitize(game.id)}">
         <div class="card-image">
@@ -340,14 +359,7 @@ function renderGames(games) {
             </div>
           ` : ''}
           
-          <div class="card-actions">
-            <button class="edit" data-id="${sanitize(game.id)}">
-              <i data-lucide="edit-2"></i> Edit
-            </button>
-            <button class="delete" data-id="${sanitize(game.id)}">
-              <i data-lucide="trash-2"></i> Delete
-            </button>
-          </div>
+          ${actionsHTML}
         </div>
       </div>
     `
