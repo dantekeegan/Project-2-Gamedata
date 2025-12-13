@@ -96,6 +96,12 @@ app.get('/api/test', (req, res) => {
 import apiRoutes from './routes/api.js'
 app.use('/', apiRoutes)
 
-app.listen(port, () => {
-  console.log(`Express is live at http://localhost:${port}`)
-})
+// Start server only in development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Express is live at http://localhost:${port}`)
+  })
+}
+
+// Export for Vercel
+export default app
