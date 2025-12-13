@@ -3,8 +3,14 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import pkg from 'express-openid-connect'
 const { auth, requiresAuth } = pkg
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 dotenv.config()
 // Initialize Express app
@@ -62,12 +68,12 @@ if (!MONGODB_URI) {
 // Enable express to parse JSON data (with larger limit for base64 images)
 app.use(express.json({ limit: '10mb' }))
 
-// Serve static files from public directory
-app.use(express.static('public'))
+// Serve static files from public directory with absolute path
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Define index.html as the root explicitly
 app.get('/', (req, res) => { 
-  res.sendFile('index.html', { root: './public' }) 
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
 // Status endpoint for frontend
